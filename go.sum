@@ -1,0 +1,10 @@
+github.com/faiface/gui v0.0.0-20190522095505-ed00d80d15da h1:boFffA5Rv6WgwUWwWlHyk7qHfw1OkhZJJC91cCY4oBc=
+github.com/faiface/gui v0.0.0-20190522095505-ed00d80d15da/go.mod h1:FwTW4XT4ioo6pOkdNqVBycvSbZ881cVXVDLF8AA66uQ=
+github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 h1:baVdMKlASEHrj19iqjARrPbaRisD7EuZEVJj6ZMLl1Q=
+github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3/go.mod h1:VEPNJUlxl5KdWjDvz6Q1l+rJlxF2i6xqDeGuGAxa87M=
+github.com/gen2brain/malgo v0.10.35 h1:D6aNo/Q0SnzQLHomTydTXxj4AJFdGJcVoE7I8JxPoUo=
+github.com/gen2brain/malgo v0.10.35/go.mod h1:zHSUNZAXfCeNsZou0RtQ6Zk7gDYLIcKOrUWtAdksnEs=
+github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6 h1:zDw5v7qm4yH7N8C8uWd+8Ii9rROdgWxQuGoJ9WDXxfk=
+github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6/go.mod h1:9YTyiznxEY1fVinfM7RvRcjRHbw2xLBJ3AAGIT0I4Nw=
+github.com/go-gl/glfw v0.0.0-20211213063430-748e38ca8aec h1:um18JldLG6QwC9tj6mSfQnb+kor5aezfPPtq1GmHek0=
+github.com/go-gl/glfw v0.0.0-20211213063430-748e38ca8aec/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
