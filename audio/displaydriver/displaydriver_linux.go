@@ -25,7 +25,7 @@ func run() {
 }
 
 func Init() {
-	displayDevice = exec.Command("sudo ../video/video")
+	displayDevice = exec.Command("/bin/sh", "-c", "sudo ../video/video")
 	displayDevice.Stdout = os.Stdout
 	displayDevice.Stderr = os.Stderr
 	go displayDevice.Run()
