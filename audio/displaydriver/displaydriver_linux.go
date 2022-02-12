@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os/exec"
-	"syscall"
 )
 
 var (
