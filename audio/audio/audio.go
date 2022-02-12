@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	periodSize uint32 = 50
+	periodSize uint32 = 100
 	delay      int    = 10
 )
 
@@ -23,7 +23,6 @@ var (
 
 func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
 	block := make([]int16, frameCount)
-	println(frameCount)
 	for i := uint32(0); i < frameCount; i++ {
 		block[i] = int16(binary.BigEndian.Uint16(inputSamples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
 	}
