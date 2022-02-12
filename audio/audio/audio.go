@@ -4,9 +4,10 @@ import (
 	"STulling/audioIn/displaydriver"
 	"encoding/binary"
 	"fmt"
+	"math"
 	"time"
 
-	"STulling/audioIn/math"
+	"STulling/audioIn/audiomath"
 
 	"github.com/gen2brain/malgo"
 )
@@ -22,20 +23,19 @@ var (
 )
 
 func readBlock(samples []byte, frameCount uint32) {
-	block := make([]int16, frameCount)
+	block := make([]float32, frameCount)
 	for i := uint32(0); i < frameCount; i++ {
-		block[i] = int16(binary.LittleEndian.Uint16(samples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
+		block[i] = math.Float32frombits(binary.LittleEndian.Uint32(samples[i*sizeInBytes*2 : i*sizeInBytes*2+4]))
 	}
 
-	displaydriver.ToDisplay <- math.ProcessBlock(block)
+	displaydriver.ToDisplay <- audiomath.ProcessBlock(block)
 }
 
 func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
-	go readBlock(inputSamples, frameCount)
 	copied := make([]byte, len(inputSamples))
 	copy(copied, inputSamples)
+	go readBlock(copied, frameCount)
 	queue <- copied
-
 }
 
 func playbackCallback(outputSamples, inputSamples []byte, frameCount uint32) {
@@ -56,9 +56,9 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 	full, _ := ctx.DeviceInfo(deviceType, infos[0].ID, malgo.Shared)
 
 	deviceConfig := malgo.DefaultDeviceConfig(deviceType)
-	deviceConfig.Capture.Format = malgo.FormatS16
+	deviceConfig.Capture.Format = malgo.FormatF32
 	deviceConfig.Capture.Channels = full.MinChannels
-	deviceConfig.Playback.Format = malgo.FormatS16
+	deviceConfig.Playback.Format = malgo.FormatF32
 	deviceConfig.Playback.Channels = full.MinChannels
 	deviceConfig.SampleRate = full.MaxSampleRate
 	deviceConfig.PeriodSizeInMilliseconds = periodSize

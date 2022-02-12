@@ -1,19 +1,19 @@
-package math
+package audiomath
 
 import (
 	"math"
 )
 
-func ProcessBlock(block []int16) [2]float64 {
+func ProcessBlock(block []float32) [2]float64 {
 	result := [2]float64{0, 0}
 	result[0] = calcRMS(block)
 	return result
 }
 
-func calcRMS(block []int16) float64 {
-	var sum float64 = 0
+func calcRMS(block []float32) float64 {
+	var sum float64
 	for _, sample := range block {
-		sum += float64(sample) / 32768.0
+		sum += math.Pow(float64(sample), 2)
 	}
 	return math.Sqrt(sum / float64(len(block)))
 }
