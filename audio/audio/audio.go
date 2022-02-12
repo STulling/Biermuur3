@@ -24,7 +24,7 @@ var (
 func readBlock(samples []byte, frameCount uint32) {
 	block := make([]int16, frameCount)
 	for i := uint32(0); i < frameCount; i++ {
-		block[i] = int16(binary.BigEndian.Uint16(samples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
+		block[i] = int16(binary.LittleEndian.Uint16(samples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
 	}
 
 	displaydriver.ToDisplay <- math.ProcessBlock(block)
