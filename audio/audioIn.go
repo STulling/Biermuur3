@@ -1,8 +1,8 @@
 package main
 
 import (
-	"STulling/audio/audio"
-	"STulling/audio/displaydriver"
+	"STulling/audioIn/audio"
+	"STulling/audioIn/displaydriver"
 )
 
 func main() {

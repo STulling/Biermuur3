@@ -1,12 +1,12 @@
 package audio
 
 import (
-	"STulling/audio/displaydriver"
+	"STulling/audioIn/displaydriver"
 	"encoding/binary"
 	"fmt"
 	"time"
 
-	"STulling/audio/math"
+	"STulling/audioIn/math"
 
 	"github.com/gen2brain/malgo"
 )
