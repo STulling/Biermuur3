@@ -2,7 +2,6 @@ package display
 
 import (
 	"fmt"
-	"syscall"
 
 	ws281x "github.com/rpi-ws281x/rpi-ws281x-go"
 )
@@ -82,10 +81,6 @@ func RGBToColor(r uint8, g uint8, b uint8) uint32 {
 }
 
 func Init() {
-	err := syscall.Setuid(0)
-	if err != nil {
-        panic(err)
-    }
 	opt := ws281x.DefaultOptions
 	opt.Channels[0].Brightness = brightness
 	opt.Channels[0].LedCount = LedCount

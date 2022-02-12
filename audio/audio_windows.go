@@ -7,3 +7,7 @@ import (
 const (
 	backend = malgo.BackendWasapi
 )
+
+func Init() {
+
+}

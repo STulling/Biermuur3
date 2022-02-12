@@ -27,6 +27,7 @@ func callback(outputSamples, inputSamples []byte, frameCount uint32) {
 }
 
 func RunAudioPipe(channel chan []int16) {
+	Init()
 	sampleBlocks = channel
 	ctx, err := malgo.InitContext(nil, malgo.ContextConfig{}, func(message string) {
 		fmt.Printf("LOG <%v>\n", message)
