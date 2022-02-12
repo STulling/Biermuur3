@@ -4,8 +4,10 @@ import (
 	"math"
 )
 
-func ProcessBlock(block []int16) (float64, float64) {
-	return calcRMS(block), 0
+func ProcessBlock(block []int16) [2]float64 {
+	result := [2]float64{0, 0}
+	result[0] = calcRMS(block)
+	return result
 }
 
 func calcRMS(block []int16) float64 {

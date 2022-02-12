@@ -1,9 +1,11 @@
 package controller
 
 import (
-	"STulling/biermuur/display"
-	"STulling/biermuur/display/effectlib"
-	"STulling/biermuur/math"
+	"STulling/video/display"
+	"STulling/video/display/effectlib"
+	"bufio"
+	"fmt"
+	"os"
 )
 
 var (
@@ -20,23 +22,26 @@ var (
 		"clear":     effectlib.Clear,
 		"snake":     effectlib.Snake,
 	}
-	callback = callbacks["wave"]
+	callback = callbacks["bars"]
+	rms      float64
+	tone     float64
 )
 
 func SetCallback(name string) {
 	callback = callbacks[name]
 }
 
-func RunDisplayPipe(channel chan []int16) {
+func RunDisplayPipe() {
 	go display.Init()
+	reader := bufio.NewReader(os.Stdin)
 	for {
 		if display.IsRunning() {
 			break
 		}
 	}
 	for {
-		block := <-channel
-		rms, tone := math.ProcessBlock(block)
+		line, _ := reader.ReadString(';')
+		fmt.Sscanf(line, "%f, %f;", &rms, &tone)
 		display.Primary = effectlib.Wheel(uint8(tone * 255))
 		callback(rms, tone)
 	}

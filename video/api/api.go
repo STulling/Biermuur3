@@ -1,7 +1,7 @@
 package api
 
 import (
-	"STulling/biermuur/display/controller"
+	"STulling/video/display/controller"
 	"fmt"
 	"net/http"
 

@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"STulling/biermuur/display"
+	"STulling/video/display"
 )
 
 func RandomRGB() uint32 {

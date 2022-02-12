@@ -4,7 +4,7 @@ import (
 	"math"
 	"math/rand"
 
-	"STulling/biermuur/display"
+	"STulling/video/display"
 )
 
 var (
