@@ -13,55 +13,63 @@ import (
 
 const (
 	periodSize uint32 = 50
+	delay      int    = 10
 )
 
 var (
-	deviceConfig malgo.DeviceConfig
-	sizeInBytes  uint32
+	sizeInBytes uint32      = 2
+	queue       chan []byte = make(chan []byte, delay+10)
 )
 
-func callback(outputSamples, inputSamples []byte, frameCount uint32) {
+func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
 	block := make([]int16, frameCount)
+	println(frameCount)
 	for i := uint32(0); i < frameCount; i++ {
-		block[i] = int16(binary.BigEndian.Uint16(inputSamples[i*sizeInBytes*deviceConfig.Capture.Channels : (i+1)*sizeInBytes*deviceConfig.Capture.Channels]))
+		block[i] = int16(binary.BigEndian.Uint16(inputSamples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
 	}
+
 	displaydriver.ToDisplay <- math.ProcessBlock(block)
+
+	copied := make([]byte, len(inputSamples))
+	copy(copied, inputSamples)
+	queue <- copied
+
 }
 
-func RunAudioPipe() {
-	ctx, err := malgo.InitContext(nil, malgo.ContextConfig{}, func(message string) {
-		fmt.Printf("LOG <%v>\n", message)
-	})
+func playbackCallback(outputSamples, inputSamples []byte, frameCount uint32) {
+	data := <-queue
+	if len(data) != 0 {
+		copy(outputSamples, data)
+	} else {
+		copy(outputSamples, make([]byte, len(outputSamples)))
+	}
+}
+
+func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun malgo.DataProc) {
+	infos, err := ctx.Devices(deviceType)
 	if err != nil {
 		panic(err)
 	}
-	defer func() {
-		_ = ctx.Uninit()
-		ctx.Free()
-	}()
 
-	infos, err := ctx.Devices(malgo.Capture)
-	if err != nil {
-		panic(err)
-	}
+	full, _ := ctx.DeviceInfo(deviceType, infos[0].ID, malgo.Shared)
 
-	full, _ := ctx.DeviceInfo(malgo.Capture, infos[0].ID, malgo.Shared)
-
-	deviceConfig = malgo.DefaultDeviceConfig(malgo.Capture)
+	deviceConfig := malgo.DefaultDeviceConfig(deviceType)
 	deviceConfig.Capture.Format = malgo.FormatS16
 	deviceConfig.Capture.Channels = full.MinChannels
+	deviceConfig.Playback.Format = malgo.FormatS16
+	deviceConfig.Playback.Channels = full.MinChannels
 	deviceConfig.SampleRate = full.MaxSampleRate
 	deviceConfig.PeriodSizeInMilliseconds = periodSize
+	deviceConfig.PeriodSizeInFrames = 0
+	deviceConfig.Periods = 1
 	deviceConfig.Alsa.NoMMap = 1
 
-	sizeInBytes = uint32(malgo.SampleSizeInBytes(deviceConfig.Capture.Format))
-
-	captureCallbacks := malgo.DeviceCallbacks{
-		Data: callback,
+	callbacks := malgo.DeviceCallbacks{
+		Data: fun,
 	}
 	captureDeviceConfig := deviceConfig
-	captureDeviceConfig.DeviceType = malgo.Capture
-	device, err := malgo.InitDevice(ctx.Context, captureDeviceConfig, captureCallbacks)
+	captureDeviceConfig.DeviceType = deviceType
+	device, err := malgo.InitDevice(ctx.Context, captureDeviceConfig, callbacks)
 	if err != nil {
 		panic(err)
 	}
@@ -74,6 +82,27 @@ func RunAudioPipe() {
 	if !device.IsStarted() {
 		panic("device not started")
 	}
+}
+
+func RunAudioPipe() {
+	ctx, err := malgo.InitContext([]malgo.Backend{backend}, malgo.ContextConfig{}, func(message string) {
+		fmt.Printf("LOG <%v>\n", message)
+	})
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		_ = ctx.Uninit()
+		ctx.Free()
+	}()
+	println("Filling delay buffer")
+	for i := 0; i < delay; i++ {
+		queue <- make([]byte, 0)
+	}
+	println("Initilizing audio capture device")
+	initDevice(ctx, malgo.Capture, captureCallback)
+	println("Initilizing audio playback device")
+	initDevice(ctx, malgo.Playback, playbackCallback)
 
 	time.Sleep(time.Hour * 1000000)
 }
