@@ -21,14 +21,17 @@ var (
 	queue       chan []byte = make(chan []byte, delay+10)
 )
 
-func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
+func readBlock(samples []byte, frameCount uint32) {
 	block := make([]int16, frameCount)
 	for i := uint32(0); i < frameCount; i++ {
-		block[i] = int16(binary.BigEndian.Uint16(inputSamples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
+		block[i] = int16(binary.BigEndian.Uint16(samples[i*sizeInBytes*2 : (i+1)*sizeInBytes*2]))
 	}
 
 	displaydriver.ToDisplay <- math.ProcessBlock(block)
+}
 
+func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
+	go readBlock(inputSamples, frameCount)
 	copied := make([]byte, len(inputSamples))
 	copy(copied, inputSamples)
 	queue <- copied
