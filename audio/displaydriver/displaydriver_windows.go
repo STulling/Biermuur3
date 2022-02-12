@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -25,6 +26,8 @@ func run() {
 
 func Init() {
 	displayDevice = exec.Command("../video/video")
+	displayDevice.Stdout = os.Stdout
+	displayDevice.Stderr = os.Stderr
 	go displayDevice.Run()
 	go run()
 }

@@ -9,7 +9,7 @@ import (
 
 var (
 	displayDevice *exec.Cmd
-	ToDisplay     = make(chan [2]float64, 0)
+	ToDisplay     = make(chan [2]float64)
 )
 
 func run() {
@@ -25,6 +25,8 @@ func run() {
 
 func Init() {
 	displayDevice = exec.Command("sudo ../video/video")
+	displayDevice.Stdout = os.Stdout
+	displayDevice.Stderr = os.Stderr
 	go displayDevice.Run()
 	go run()
 }

@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
+	println("Starting Display Pipe...")
 	controller.RunDisplayPipe()
 }
