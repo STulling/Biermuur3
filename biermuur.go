@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"STulling/biermuur/api"
+	"STulling/biermuur/audio"
+	"STulling/biermuur/display/controller"
+)
 
 func main() {
-	fmt.Println("Hello, world.")
+	channel := make(chan []int16)
+	go audio.RunAudioPipe(channel)
+	go api.Run()
+	controller.RunDisplayPipe(channel)
 }
