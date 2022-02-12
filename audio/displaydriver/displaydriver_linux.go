@@ -25,9 +25,7 @@ func run() {
 }
 
 func Init() {
-	displayDevice = exec.Command("../video/video")
-	displayDevice.SysProcAttr = &syscall.SysProcAttr{}
-	displayDevice.SysProcAttr.Credential = &syscall.Credential{Uid: 0, Gid: 0}
+	displayDevice = exec.Command("sudo ../video/video")
 	go displayDevice.Run()
 	go run()
 }
