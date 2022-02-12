@@ -22,7 +22,7 @@ var (
 		"clear":     effectlib.Clear,
 		"snake":     effectlib.Snake,
 	}
-	callback = callbacks["bars"]
+	callback = callbacks["wave"]
 	rms      float64
 	tone     float64
 )
