@@ -50,7 +50,7 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 		panic(err)
 	}
 
-	full, _ := ctx.DeviceInfo(deviceType, infos[len(infos)-1].ID, malgo.Shared)
+	full, _ := ctx.DeviceInfo(deviceType, infos[0].ID, malgo.Shared)
 
 	deviceConfig := malgo.DefaultDeviceConfig(deviceType)
 	deviceConfig.Capture.Format = malgo.FormatS16
