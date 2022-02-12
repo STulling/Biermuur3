@@ -5,5 +5,5 @@ import (
 )
 
 const (
-	backend = malgo.BackendALSA
+	backend = malgo.BackendAlsa
 )
