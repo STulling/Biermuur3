@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
-	"math"
 	"testing"
 	"time"
 
@@ -21,9 +20,9 @@ var (
 )
 
 func readBlock(samples []byte, frameCount uint32) {
-	block := make([]float32, frameCount)
+	block := make([]int16, frameCount)
 	for i := uint32(0); i < frameCount; i++ {
-		block[i] = math.Float32frombits(binary.LittleEndian.Uint32(samples[i*sizeInBytes*2 : i*sizeInBytes*2+4]))
+		block[i] = int16(binary.LittleEndian.Uint16(samples[i*sizeInBytes*2 : i*sizeInBytes*2+1]))
 	}
 }
 
