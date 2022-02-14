@@ -30,7 +30,7 @@ func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
 	fmt.Printf("[INFO] Captured %v samples\n", frameCount)
 	copied := make([]byte, len(inputSamples))
 	copy(copied, inputSamples)
-	go readBlock(copied, frameCount)
+	//go readBlock(copied, frameCount)
 	queue <- copied
 	data := <-queue
 	if len(data) != 0 {
@@ -90,7 +90,9 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 }
 
 func RunAudioPipe() {
-	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendJack}, malgo.ContextConfig{}, func(message string) {
+	ctxConfig := malgo.ContextConfig{}
+	ctxConfig.Jack.TryStartServer = 1
+	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendJack}, ctxConfig, func(message string) {
 		fmt.Printf("LOG <%v>\n", message)
 	})
 	if err != nil {
