@@ -63,9 +63,9 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 	fmt.Printf("[%s] SampleRate: %d-%d\n", full.Name(), full.MinSampleRate, full.MaxSampleRate)
 
 	deviceConfig := malgo.DefaultDeviceConfig(deviceType)
-	deviceConfig.Capture.Format = malgo.FormatF32
+	deviceConfig.Capture.Format = malgo.FormatS16
 	deviceConfig.Capture.Channels = full.MinChannels
-	deviceConfig.Playback.Format = malgo.FormatF32
+	deviceConfig.Playback.Format = malgo.FormatS16
 	deviceConfig.Playback.Channels = full.MinChannels
 	deviceConfig.SampleRate = full.MaxSampleRate
 	deviceConfig.PeriodSizeInMilliseconds = periodSize
@@ -94,7 +94,7 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 }
 
 func RunAudioPipe() {
-	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendPulseaudio}, malgo.ContextConfig{}, func(message string) {
+	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendAlsa}, malgo.ContextConfig{}, func(message string) {
 		fmt.Printf("LOG <%v>\n", message)
 	})
 	if err != nil {
