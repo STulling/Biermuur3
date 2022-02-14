@@ -32,10 +32,6 @@ func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
 	copy(copied, inputSamples)
 	go readBlock(copied, frameCount)
 	queue <- copied
-
-}
-
-func playbackCallback(outputSamples, inputSamples []byte, frameCount uint32) {
 	data := <-queue
 	if len(data) != 0 {
 		copy(outputSamples, data)
@@ -94,7 +90,7 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 }
 
 func RunAudioPipe() {
-	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendAlsa}, malgo.ContextConfig{}, func(message string) {
+	ctx, err := malgo.InitContext([]malgo.Backend{malgo.BackendJack}, malgo.ContextConfig{}, func(message string) {
 		fmt.Printf("LOG <%v>\n", message)
 	})
 	if err != nil {
@@ -108,10 +104,8 @@ func RunAudioPipe() {
 	for i := 0; i < delay; i++ {
 		queue <- make([]byte, 0)
 	}
-	println("Initilizing audio capture device")
-	initDevice(ctx, malgo.Capture, captureCallback)
-	println("Initilizing audio playback device")
-	initDevice(ctx, malgo.Playback, playbackCallback)
+	println("Initilizing audio device")
+	initDevice(ctx, malgo.Duplex, captureCallback)
 
 	time.Sleep(time.Hour * 1000000)
 }
