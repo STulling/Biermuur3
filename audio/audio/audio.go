@@ -55,6 +55,13 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 		panic(err)
 	}
 
+	fmt.Printf("[INFO] Found %v devices\n", len(infos))
+	for _, info := range infos {
+		fmt.Printf("[INFO] Device: %v\n", info.Name())
+	}
+
+	fmt.Printf("[INFO] Using device %v\n", infos[0].Name())
+
 	full, _ := ctx.DeviceInfo(deviceType, infos[0].ID, malgo.Shared)
 
 	fmt.Printf("[%s] Channels: %d-%d\n", full.Name(), full.MinChannels, full.MaxChannels)
