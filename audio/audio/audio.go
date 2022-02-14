@@ -32,10 +32,12 @@ func readBlock(samples []byte, frameCount uint32) {
 }
 
 func captureCallback(outputSamples, inputSamples []byte, frameCount uint32) {
+	fmt.Printf("[INFO] Captured %v samples\n", frameCount)
 	copied := make([]byte, len(inputSamples))
 	copy(copied, inputSamples)
 	go readBlock(copied, frameCount)
 	queue <- copied
+
 }
 
 func playbackCallback(outputSamples, inputSamples []byte, frameCount uint32) {
@@ -54,6 +56,9 @@ func initDevice(ctx *malgo.AllocatedContext, deviceType malgo.DeviceType, fun ma
 	}
 
 	full, _ := ctx.DeviceInfo(deviceType, infos[0].ID, malgo.Shared)
+
+	fmt.Printf("[%s] Channels: %d-%d\n", full.Name(), full.MinChannels, full.MaxChannels)
+	fmt.Printf("[%s] SampleRate: %d-%d\n", full.Name(), full.MinSampleRate, full.MaxSampleRate)
 
 	deviceConfig := malgo.DefaultDeviceConfig(deviceType)
 	deviceConfig.Capture.Format = malgo.FormatF32
