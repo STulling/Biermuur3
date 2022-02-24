@@ -23,6 +23,7 @@ var (
 		"snake":     effectlib.Snake,
 	}
 	callback = callbacks["wave"]
+	maxRMS   = 0.0
 	rms      float64
 	tone     float64
 )
@@ -42,6 +43,15 @@ func RunDisplayPipe() {
 	for {
 		line, _ := reader.ReadString(';')
 		fmt.Sscanf(line, "%f, %f;", &rms, &tone)
+		// normalize rms
+		rms = rms / maxRMS
+		//update maxRMS
+		if rms > maxRMS {
+			maxRMS = rms
+		}
+		// decay maxRMS
+		maxRMS = maxRMS * 0.999
+
 		display.Primary = effectlib.Wheel(uint8(tone * 255))
 		callback(rms, tone)
 	}
