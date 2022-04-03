@@ -3,6 +3,7 @@ package effectlib
 import (
 	"math"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"STulling/video/display"
@@ -207,17 +208,16 @@ var numbers_pixels = [10][5][3]bool{
 }
 
 var offset = [4][2]int{
-	{1, 6},
-	{5, 6},
-	{12, 6},
-	{16, 6},
+	{1, 7},
+	{5, 7},
+	{12, 7},
+	{16, 7},
 }
 
-func Clock(rms float64, pitch float64) {
-	display.SetStrip(display.Secondary)
+func drawHours() {
 	hm := time.Now().Format("1504")
 
-	//draw numbers
+	//draw hours and minutes
 	for c, offset := range offset {
 		index := hm[c] - 48 // ascii to int
 		number_pixels := numbers_pixels[index]
@@ -230,14 +230,27 @@ func Clock(rms float64, pitch float64) {
 		}
 	}
 
-	display.SetPixelColor(9, 6, display.Primary)
-	display.SetPixelColor(10, 6, display.Primary)
 	display.SetPixelColor(9, 7, display.Primary)
 	display.SetPixelColor(10, 7, display.Primary)
-	display.SetPixelColor(9, 9, display.Primary)
-	display.SetPixelColor(10, 9, display.Primary)
+	display.SetPixelColor(9, 8, display.Primary)
+	display.SetPixelColor(10, 8, display.Primary)
 	display.SetPixelColor(9, 10, display.Primary)
 	display.SetPixelColor(10, 10, display.Primary)
+	display.SetPixelColor(9, 11, display.Primary)
+	display.SetPixelColor(10, 11, display.Primary)
+}
+
+func drawSeconds() {
+	sec, _ := strconv.Atoi(time.Now().Format("05"))
+	for i := 0; i < sec; i++ {
+		display.SetLedColor(i, display.Primary)
+	}
+}
+
+func Clock(rms float64, pitch float64) {
+	display.SetStrip(display.Secondary)
+	drawHours()
+	drawSeconds()
 	display.Render()
 }
 
