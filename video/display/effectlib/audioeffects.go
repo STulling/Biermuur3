@@ -238,6 +238,7 @@ func Clock(rms float64, pitch float64) {
 	display.SetPixelColor(10, 9, display.Primary)
 	display.SetPixelColor(9, 10, display.Primary)
 	display.SetPixelColor(10, 10, display.Primary)
+	display.Render()
 }
 
 func Clear(rms float64, pitch float64) {
