@@ -23,7 +23,7 @@ var (
 		"snake":     effectlib.Snake,
 		"clock":     effectlib.Clock,
 	}
-	callback = callbacks["wave"]
+	callback = callbacks["clock"]
 	maxRMS   = 1.0
 	rms      float64
 	tone     float64
