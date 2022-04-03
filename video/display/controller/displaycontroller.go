@@ -21,6 +21,7 @@ var (
 		"bars":      effectlib.Simple,
 		"clear":     effectlib.Clear,
 		"snake":     effectlib.Snake,
+		"clock":     effectlib.Clock,
 	}
 	callback = callbacks["wave"]
 	maxRMS   = 1.0

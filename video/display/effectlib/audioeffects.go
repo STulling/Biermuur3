@@ -3,6 +3,7 @@ package effectlib
 import (
 	"math"
 	"math/rand"
+	"time"
 
 	"STulling/video/display"
 )
@@ -139,6 +140,104 @@ func Mond(rms float64, pitch float64) {
 		}
 	}
 	display.Render()
+}
+
+var numbers_pixels = [10][5][3]bool{
+	{
+		{true, true, true},
+		{true, false, true},
+		{true, false, true},
+		{true, false, true},
+		{true, true, true},
+	}, {
+		{true, true, false},
+		{false, true, false},
+		{false, true, false},
+		{false, true, false},
+		{true, true, true},
+	}, {
+		{true, true, true},
+		{false, false, true},
+		{true, true, true},
+		{true, false, false},
+		{true, true, true},
+	}, {
+		{true, true, true},
+		{false, false, true},
+		{true, true, true},
+		{false, false, true},
+		{true, true, true},
+	}, {
+		{true, false, true},
+		{true, false, true},
+		{true, true, true},
+		{false, false, true},
+		{false, false, true},
+	}, {
+		{true, true, true},
+		{true, false, false},
+		{true, true, true},
+		{false, false, true},
+		{true, true, true},
+	}, {
+		{true, true, true},
+		{true, false, false},
+		{true, true, true},
+		{true, false, true},
+		{true, true, true},
+	}, {
+		{true, true, true},
+		{false, false, true},
+		{false, false, true},
+		{false, false, true},
+		{false, false, true},
+	}, {
+		{true, true, true},
+		{true, false, true},
+		{true, true, true},
+		{true, false, true},
+		{true, true, true},
+	}, {
+		{true, true, true},
+		{true, false, true},
+		{true, true, true},
+		{false, false, true},
+		{true, true, true},
+	},
+}
+
+var offset = [4][2]int{
+	{1, 6},
+	{5, 6},
+	{12, 6},
+	{16, 6},
+}
+
+func Clock(rms float64, pitch float64) {
+	display.SetStrip(display.Secondary)
+	hm := time.Now().Format("1504")
+
+	//draw numbers
+	for c, offset := range offset {
+		index := hm[c] - 48 // ascii to int
+		number_pixels := numbers_pixels[index]
+		for y, row := range number_pixels {
+			for x, cell := range row {
+				if cell {
+					display.SetPixelColor(offset[0]+x, offset[1]+y, display.Primary)
+				}
+			}
+		}
+	}
+
+	display.SetPixelColor(9, 6, display.Primary)
+	display.SetPixelColor(10, 6, display.Primary)
+	display.SetPixelColor(9, 7, display.Primary)
+	display.SetPixelColor(10, 7, display.Primary)
+	display.SetPixelColor(9, 9, display.Primary)
+	display.SetPixelColor(10, 9, display.Primary)
+	display.SetPixelColor(9, 10, display.Primary)
+	display.SetPixelColor(10, 10, display.Primary)
 }
 
 func Clear(rms float64, pitch float64) {
