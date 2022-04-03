@@ -242,6 +242,7 @@ func drawHours() {
 
 func drawSeconds() {
 	sec, _ := strconv.Atoi(time.Now().Format("05"))
+	sec /= 3
 	for i := 0; i < sec; i++ {
 		display.SetLedColor(i, display.Primary)
 	}
