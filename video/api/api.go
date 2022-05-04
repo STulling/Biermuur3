@@ -2,11 +2,11 @@ package api
 
 import (
 	"STulling/video/display/controller"
+	"embed"
 	"fmt"
-	"net/http"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func getEffects(c *gin.Context) {
@@ -20,17 +20,33 @@ func setAction(c *gin.Context) {
 	c.String(http.StatusOK, "OK")
 }
 
+func serveFile(file string) func(*gin.Context) {
+	return func(c *gin.Context) {
+		c.FileFromFS(fmt.Sprintf("static%s", file), http.FS(static))
+	}
+}
+
+func serveDir(dir string) func(*gin.Context) {
+	return func(c *gin.Context) {
+		path := c.Param("path")
+		c.FileFromFS(fmt.Sprintf("static/%s/%s", dir, path), http.FS(static))
+	}
+}
+
+//go:embed static/*
+var static embed.FS
+
 func Run() {
 	router := gin.Default()
 	router.Use(cors.Default())
 
-	router.StaticFile("/", "./api/static/index.html")
-	router.StaticFile("/favicon.png", "./api/static/favicon.png")
-	router.StaticFile("/style.css", "./api/static/style.css")
-	router.Static("/components", "./api/static/components")
+	router.GET("/", serveFile("/"))
+	router.GET("/favicon.png", serveFile("/favicon.png"))
+	router.GET("/style.css", serveFile("/style.css"))
+	router.GET("/components/:path", serveDir("components"))
 
 	router.GET("/api/DJ/effects/:locale", getEffects)
 	router.GET("/api/DJ/:action", setAction)
 	fmt.Println("Starting...")
-	router.Run("0.0.0.0:80")
+	router.Run("0.0.0.0:800")
 }

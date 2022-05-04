@@ -1,6 +1,6 @@
 module STulling/video
 
-go 1.15
+go 1.16
 
 require (
 	github.com/faiface/gui v0.0.0-20190522095505-ed00d80d15da
