@@ -48,5 +48,5 @@ func Run() {
 	router.GET("/api/DJ/effects/:locale", getEffects)
 	router.GET("/api/DJ/:action", setAction)
 	fmt.Println("Starting...")
-	router.Run("0.0.0.0:800")
+	router.Run("0.0.0.0:80")
 }
