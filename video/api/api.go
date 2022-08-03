@@ -58,7 +58,7 @@ func Run() {
 	router.GET("/components/:path", serveDir("components"))
 
 	router.GET("/api/DJ/effects/:locale", getEffects)
-	router.GET("/api/DJ/activations/:locale", getEffects)
+	router.GET("/api/DJ/activations/:locale", getActivations)
 
 	router.GET("/api/DJ/action/:action", setAction)
 	router.GET("/api/DJ/activation/:activation", setActivation)
