@@ -4,9 +4,10 @@ import (
 	"STulling/video/display/controller"
 	"embed"
 	"fmt"
+	"net/http"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func getEffects(c *gin.Context) {
@@ -14,9 +15,20 @@ func getEffects(c *gin.Context) {
 	c.JSON(http.StatusOK, effects[locale])
 }
 
+func getActivations(c *gin.Context) {
+	locale := c.Param("locale")
+	c.JSON(http.StatusOK, activations[locale])
+}
+
 func setAction(c *gin.Context) {
 	action := c.Param("action")
 	go controller.SetCallback(action)
+	c.String(http.StatusOK, "OK")
+}
+
+func setActivation(c *gin.Context) {
+	activation := c.Param("activation")
+	go controller.SetActivation(activation)
 	c.String(http.StatusOK, "OK")
 }
 
@@ -46,7 +58,10 @@ func Run() {
 	router.GET("/components/:path", serveDir("components"))
 
 	router.GET("/api/DJ/effects/:locale", getEffects)
-	router.GET("/api/DJ/:action", setAction)
+	router.GET("/api/DJ/activations/:locale", getEffects)
+
+	router.GET("/api/DJ/action/:action", setAction)
+	router.GET("/api/DJ/activation/:activation", setActivation)
 	fmt.Println("Starting...")
 	router.Run("0.0.0.0:80")
 }

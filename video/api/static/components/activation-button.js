@@ -1,4 +1,4 @@
-window.customElements.define("effect-button", class extends HTMLElement {
+window.customElements.define("activation-button", class extends HTMLElement {
     request = new XMLHttpRequest();
 
     constructor() {
@@ -11,7 +11,7 @@ window.customElements.define("effect-button", class extends HTMLElement {
     }
 
     sendRequest() {
-        this.request.open("GET", `api/DJ/action/${this.url}`, true );
+        this.request.open("GET", `api/DJ/activation/${this.url}`, true );
         this.request.send(null);
     }
 

@@ -23,14 +23,29 @@ var (
 		"snake":     effectlib.Snake,
 		"clock":     effectlib.Clock,
 	}
-	callback = callbacks["clock"]
-	maxRMS   = 1.0
-	rms      float64
-	tone     float64
+	activations = map[string]func(float64) float64{
+		"linear":              effectlib.Linear,
+		"sine":                effectlib.Sine,
+		"smoothstep":          effectlib.Smoothstep,
+		"smootherstep":        effectlib.Smootherstep,
+		"quadratic":           effectlib.Quadratic,
+		"cubic":               effectlib.Cubic,
+		"truncatedlinear":     effectlib.Truncatedlinear,
+		"moretruncatedlinear": effectlib.MoreTruncatedlinear,
+	}
+	activation = activations["linear"]
+	callback   = callbacks["clear"]
+	maxRMS     = 1.0
+	rms        float64
+	tone       float64
 )
 
 func SetCallback(name string) {
 	callback = callbacks[name]
+}
+
+func SetActivation(name string) {
+	activation = activations[name]
 }
 
 func RunDisplayPipe() {
@@ -52,6 +67,6 @@ func RunDisplayPipe() {
 		rms = rms / maxRMS
 
 		display.Primary = effectlib.Wheel(uint8(tone * 255))
-		callback(rms, tone)
+		callback(activation(rms), tone)
 	}
 }
